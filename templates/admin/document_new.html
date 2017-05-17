@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div>
+    {{ msgs }}
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="" >
+            <form method=POST enctype=multipart/form-data action="{{ url_for('admin.product_new') }}">
+                <label for="id-name">商品名称</label>
+                <input class="form-control" name="name" id=id-name required>
+                <label for="id-price">商品价格</label>
+                <input class="form-control" name=price id=id-price required>
+                <label for="text-input">商品详情</label>
+                <textarea id="text-input" oninput="this.editor.update()"
+                  class="form-control" rows="10" name="detail"></textarea>
+                <hr>
+                <button class="btn btn-success btn-block" >创建商品</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div id="preview"> </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>
+<script>
+function Editor(input, preview) {
+    this.update = function () {
+        preview.innerHTML = markdown.toHTML(input.value);
+    };
+    input.editor = this;
+    this.update();
+}
+new Editor(document.getElementById("text-input"), document.getElementById("preview"));
+</script>
+{% endblock %}

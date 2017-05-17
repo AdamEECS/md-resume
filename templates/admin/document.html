@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div>
+    {{ msgs }}
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="row">
+            <div class="col-xs-5">
+
+                <br>
+
+            </div>
+            <div class="col-xs-7">
+                <img src="{{ p.pic }}"  class="product-pic-l" id=id-pic-view>
+            </div>
+        </div>
+            <form method=POST enctype=multipart/form-data action="{{ url_for('admin.product_update', uuid=p.uuid) }}">
+                <label for="id-name">商品名称</label>
+                <input class="form-control" name="name" id=id-name value="{{ p.name }}" required>
+                <label for="id-price">商品价格</label>
+                <input class="form-control" name=price id=id-price value="{{ p.price }}" required>
+                <label for="text-input">商品详情</label>
+                <textarea id="text-input" oninput="this.editor.update()"
+                  class="form-control" rows="10" name="detail">{{ p.detail }}</textarea>
+                <hr>
+                <button class="btn btn-success btn-block" >更新</button>
+            </form>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div id="preview"> </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>
+<script>
+function Editor(input, preview) {
+    this.update = function () {
+        preview.innerHTML = markdown.toHTML(input.value);
+    };
+    input.editor = this;
+    this.update();
+}
+const log = function log(){
+  console.log.apply(console, arguments);
+}
+function ajaxFormSubmit() {
+    let ajaxForm = $(event.target)
+    ajaxForm.ajaxSubmit(function(message) {
+        if(message.success == true){
+            let data = {
+                key:ajaxForm.data('key')
+            }
+            let url = ajaxForm.data('url')
+            $.post(url, data, function(){
+                location.reload()
+            })
+        }
+    });
+    return false;
+}
+new Editor(document.getElementById("text-input"), document.getElementById("preview"));
+</script>
+{% endblock %}

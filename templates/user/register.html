@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+<script src="https://cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+
+<div id="id-div-register" class="div-form sign-flow">
+    <form method="post" action="{{ url_for('user.register') }}">
+        <div class="group-inputs">
+            <input name="username" id="id-input-username" placeholder="用户名" required>
+            <input name="password" id="id-input-password" placeholder="密码" required>
+            <input name="email" id="id-input-email" placeholder="邮箱" required>
+            <input name="captcha" id="id-input-captcha" placeholder="验证码（不区分大小写）" autocomplete="off" required>
+            <img onclick="this.setAttribute('src','/img/captcha?nocache='+Math.random());"
+                 src="/img/captcha" alt="Captcha" class="right"/>
+            <!-- <input name="captcha" id="id-input-mail-code" placeholder="邮箱码" required>
+            <button class="btn btn-info right" id=id-button-mail-code type=button>获取</button> -->
+        </div>
+        <br>
+        <button class="btn btn-default btn-block">注册</button>
+    </form>
+</div>
+
+<div id="particles-js"></div>
+<script type="text/javascript">
+    particlesJS.load('particles-js', '/static/js/particles.json');
+</script>
+
+
+
+{% endblock %}
