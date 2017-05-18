@@ -130,8 +130,9 @@ def logout():
 @main.route('/profile')
 @login_required
 def profile():
-    cu = current_user()
-    return render_template('user/profile.html', u=cu)
+    u = current_user()
+    d = Document.find_one(user_uuid=u.uuid)
+    return render_template('user/profile.html', u=u, d=d)
 
 
 @main.route('/profile', methods=['POST'])
@@ -167,8 +168,6 @@ def update_email():
 def document():
     u = current_user()
     p = Document.find_one(user_uuid=u.uuid)
-    if p is None:
-        p = Document.new({'user_uuid': u.uuid})
     return render_template('user/document.html', p=p, u=u)
 
 
@@ -180,6 +179,17 @@ def document_update():
     form = request.form
     p.update(form)
     return redirect(url_for('user.document'))
+
+
+@main.route('/document/setting', methods=['POST'])
+@login_required
+def document_setting():
+    u = current_user()
+    p = Document.find_one(user_uuid=u.uuid)
+    form = request.form
+    p.update_setting(form)
+    flash('简历设置已更新', 'success')
+    return redirect(url_for('user.profile'))
 
 
 @main.route('/auth')

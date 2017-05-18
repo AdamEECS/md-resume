@@ -6,17 +6,17 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <div class="row">
-
+            <div class="">
                 简历地址：
                 <a href="{{ url_for('document.index', doc_url=p.doc_url, _external=True) }}">
                     {{ url_for('document.index', doc_url=p.doc_url, _external=True) }}
                 </a>
-
             </div>
             <form method=POST enctype=multipart/form-data action="{{ url_for('user.document_update') }}">
-
-                <label for="text-input"></label>
+                <label for="css-input">自定义CSS</label>
+                <textarea id="css-input"
+                          class="form-control" rows="8" name="css">{{ p.css }}</textarea>
+                <label for="text-input">简历内容</label>
                 <textarea id="text-input" oninput="this.editor.update()"
                           class="form-control" rows="20" name="detail">{{ p.detail }}</textarea>
                 <hr>
@@ -25,6 +25,7 @@
         </div>
         <div class="col-xs-12 col-sm-6">
             <div id="preview"></div>
+            <style>{{ p.css }}</style>
         </div>
     </div>
     <script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>

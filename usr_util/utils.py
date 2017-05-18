@@ -2,6 +2,12 @@ import time
 from uuid import uuid4
 
 
+bool_dict = {
+    'true': True,
+    'false': False,
+}
+
+
 def timestamp():
     return int(time.time())
 

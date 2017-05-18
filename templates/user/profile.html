@@ -1,69 +1,102 @@
 {% extends 'base.html' %} {% block body %}
-<div>
-    <h1>Profile</h1>
-</div>
-<div class="panel panel-default panel-profile">
-    <div class="panel-heading">用户名及密码</div>
-    <div class="panel-body">
-        <form method=POST enctype=multipart/form-data action="{{ url_for('user.profile_update') }}">
-            <label for="id-name">用户名</label>
-            <input class="form-control" name="username" id=id-name value="{{ u.username }}" readonly>
-            <label for="id-password">修改密码</label>
-            <input class="form-control" name=password id=id-password>
-            <label for="id-re-password">重复密码</label>
-            <input class="form-control" name=re_password id=id-re-password>
-            <hr>
-            <button class="btn btn-success btn-block">更新</button>
-        </form>
+    <div>
+        <h1>Profile</h1>
     </div>
-
-</div>
-<div class="panel panel-default panel-profile">
-    <div class="panel-heading">邮箱信息</div>
-    <div class="panel-body">
-
-        <div id=id-div-email-info>
-            <label>
-            邮箱
-            <div class="">
-            {{ u.email }}
-            </div>
-            </label>
-
-            <label>
-            验证状态
-            {% if u.email_verify %}
-            <p class="text-success">
-                通过
-            </p>
-            {% else %}
-            <p class="text-danger">
-            未验证
-            </p>
-            {% endif %}
-            </label>
-            <br>
-            <button class="btn btn-info btn-block button-re-verify" id=id-button-re-verify>更新验证</button>
-        </div>
-
-        <div id="id-div-email-update" class="" hidden>
-            <form method="post" action="{{ url_for('user.update_email') }}" onsubmit="return ajaxFormSubmit()">
-                <div class="group-inputs">
-                    <input name="password" type=password placeholder="密码" required>
-                    <input name="email" placeholder="新邮箱" required>
-                    <input name="captcha" placeholder="验证码（不区分大小写）" autocomplete="off" required>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default panel-profile">
+                <div class="panel-heading">用户名及密码</div>
+                <div class="panel-body">
+                    <form method=POST enctype=multipart/form-data action="{{ url_for('user.profile_update') }}">
+                        <label for="id-name">用户名</label>
+                        <input class="form-control" name="username" id=id-name value="{{ u.username }}" readonly>
+                        <label for="id-password">修改密码</label>
+                        <input class="form-control" name=password id=id-password>
+                        <label for="id-re-password">重复密码</label>
+                        <input class="form-control" name=re_password id=id-re-password>
+                        <hr>
+                        <button class="btn btn-success btn-block">提交修改密码</button>
+                    </form>
                 </div>
-                <img onclick="this.setAttribute('src','/img/captcha?nocache='+Math.random());" src="/img/captcha" alt="Captcha" class="" />
-                <br>
-                <button class="btn btn-info btn-block" id=id-button-verify type=submit>获取验证邮件</button>
-                <button class="btn btn-default btn-block button-re-verify" type=button>取消更新</button>
-            </form>
+            </div>
+
+            <div class="panel panel-default panel-profile">
+                <div class="panel-heading">邮箱信息</div>
+                <div class="panel-body">
+
+                    <div id=id-div-email-info>
+                        <label>
+                            邮箱
+                            <div class="">
+                                {{ u.email }}
+                            </div>
+                        </label>
+
+                        <label>
+                            验证状态
+                            {% if u.email_verify %}
+                                <p class="text-success">
+                                    通过
+                                </p>
+                            {% else %}
+                                <p class="text-danger">
+                                    未验证
+                                </p>
+                            {% endif %}
+                        </label>
+                        <br>
+                        <button class="btn btn-info btn-block button-re-verify" id=id-button-re-verify>更新验证</button>
+                    </div>
+
+                    <div id="id-div-email-update" class="" hidden>
+                        <form method="post" action="{{ url_for('user.update_email') }}"
+                              onsubmit="return ajaxFormSubmit()">
+                            <div class="group-inputs">
+                                <input name="password" type=password placeholder="密码" required>
+                                <input name="email" placeholder="新邮箱" required>
+                                <input name="captcha" placeholder="验证码（不区分大小写）" autocomplete="off" required>
+                            </div>
+                            <img onclick="this.setAttribute('src','/img/captcha?nocache='+Math.random());"
+                                 src="/img/captcha"
+                                 alt="Captcha" class=""/>
+                            <br>
+                            <button class="btn btn-info btn-block" id=id-button-verify type=submit>获取验证邮件</button>
+                            <button class="btn btn-default btn-block button-re-verify" type=button>取消更新</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
-
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panel-default panel-profile">
+                <div class="panel-heading">简历信息</div>
+                <div class="panel-body">
+                    <form method=POST enctype=multipart/form-data action="{{ url_for('user.document_setting') }}">
+                        <label for="id-doc-title">简历Title</label>
+                        <input class="form-control" name=title id="id-doc-title" value="{{ d.title }}">
+                        <label for="id-doc-url">设置URL</label>
+                        <input class="form-control" name=doc_url id=id-doc-url value="{{ d.doc_url }}">
+                        <label>预览URL</label>
+                        <a href="#">
+                            {{ url_for('document.index', doc_url=d.doc_url, _external=True) }}
+                        </a>
+                        <label for="id-doc-public">授权访问</label>
+                        <select name="public" class="form-control" id=id-doc-public>
+                            <option value=true {% if d.public %} selected {% endif %}>公开</option>
+                            <option value=false {% if not d.public %} selected {% endif %}>私有</option>
+                        </select>
+                        <hr>
+                        <button class="btn btn-success btn-block">提交简历设置</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 
 {% endblock %}

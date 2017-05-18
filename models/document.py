@@ -1,4 +1,5 @@
 from . import MongoModel
+from . import bool_dict
 from flask import current_app as app
 
 
@@ -11,6 +12,7 @@ class Document(MongoModel):
             ('title', str, ''),
             ('public', bool, False),
             ('detail', str, ''),
+            ('css', str, ''),
         ]
         fields.extend(super()._fields())
         return fields
@@ -39,3 +41,12 @@ class Document(MongoModel):
         if len(url) > 0:
             self.pic = url
             self.save()
+
+    def update_setting(self, form):
+        form = form.to_dict()
+        public = form.pop('public', 'false')
+        form['public'] = bool_dict.get(public, False)
+        if self.has(doc_url=form.get('doc_url')):
+            form.pop('doc_url')
+        self.update(form)
+        return self

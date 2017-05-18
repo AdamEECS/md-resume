@@ -5,6 +5,7 @@ from . import MongoModel
 from . import timestamp
 from . import safe_list_get
 from . import short_uuid
+from . import bool_dict
 from decimal import Decimal
 from .document import Document
 from .mail import send_verify_email
@@ -16,12 +17,6 @@ class Role(Enum):
     root = 1
     admin = 2
     client = 3
-
-
-bool_dict = {
-    'true': True,
-    'false': False,
-}
 
 
 class User(MongoModel):
@@ -45,6 +40,7 @@ class User(MongoModel):
         m = super().new(form)
         m.password = m.salted_password(form.get('password', ''))
         m.save()
+        Document.new({'user_uuid': m.uuid})
         return m
 
     def update_user(self, form):
@@ -54,7 +50,7 @@ class User(MongoModel):
         re_password = form.pop('re_password', '')
         email_verify = form.pop('email_verify', 'true')
         form['email_verify'] = bool_dict.get(email_verify, False)
-        if(self.email_exist(form.get('email'))):
+        if (self.email_exist(form.get('email'))):
             form.pop('email')
         self.update(form)
         if len(password) > 0 and password == re_password:
@@ -236,4 +232,3 @@ class User(MongoModel):
             return base64.b64decode(tb64).decode('ascii')
         except:
             return None
-
