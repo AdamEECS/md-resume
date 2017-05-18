@@ -1,6 +1,8 @@
 from routes import *
 from models.user import User
 from models.document import Document
+from models.auth import Auth
+from models.access import Access
 from decimal import Decimal
 from flask import current_app as app
 
@@ -192,8 +194,60 @@ def document_setting():
     return redirect(url_for('user.profile'))
 
 
-@main.route('/auth')
+@main.route('/auths')
 @login_required
-def auth():
-    cu = current_user()
-    return render_template('user/profile.html', u=cu)
+def auths():
+    u = current_user()
+    auths = Auth.find(user_uuid=u.uuid)
+    auths.reverse()
+    for a in auths:
+        a.verified = a.verify()
+    return render_template('user/auths.html', u=u, auths=auths)
+
+
+@main.route('/auths', methods=['POST'])
+@login_required
+def auths_search():
+    u = current_user()
+    form = request.form
+    auths = Auth.search_or(form)
+    auths.reverse()
+    for a in auths:
+        a.verified = a.verify()
+    return render_template('user/auths.html', u=u, auths=auths)
+
+
+@main.route('/auth/new')
+@login_required
+def auth_new():
+    u = current_user()
+    d = Document.find_one(user_uuid=u.uuid)
+    form = dict(
+        user_uuid=u.uuid,
+        doc_uuid=d.uuid,
+    )
+    a = Auth.new(form)
+    return redirect(url_for('user.auth', token=a.token))
+
+
+@main.route('/auth/<token>')
+@login_required
+def auth(token):
+    u = current_user()
+    d = Document.find_one(user_uuid=u.uuid)
+    a = Auth.find_one(token=token)
+    a.verified = a.verify()
+    history = Access.find(token=token, user_uuid=u.uuid)
+    history.reverse()
+    return render_template('user/auth.html', u=u, d=d, a=a, history=history)
+
+
+@main.route('/auth/<token>', methods=['POST'])
+@login_required
+def auth_update(token):
+    u = current_user()
+    a = Auth.find_one(token=token)
+    form = request.form
+    if a.user_uuid == u.uuid:
+        a.update_setting(form)
+    return redirect(url_for('user.auth', token=token))

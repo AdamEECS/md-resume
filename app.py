@@ -27,6 +27,14 @@ def register_filters(app):
     app.jinja_env.filters.update(filters)
 
 
+def register_errorhandler(app):
+    from flask import render_template
+
+    @app.errorhandler(401)
+    def page_not_found(e):
+        return render_template('error/401.html'), 401
+
+
 def configure_app():
     from config import key
     app.secret_key = key.secret_key
@@ -34,6 +42,7 @@ def configure_app():
     app.config.update(config_dict)
     register_routes(app)
     register_filters(app)
+    register_errorhandler(app)
     # 设置 log, 否则输出会被 gunicorn 吃掉
     if not app.debug:
         stream_handler = logging.StreamHandler()
