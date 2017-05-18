@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <div>
+        {{ msgs }}
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="row">
+
+                简历地址：
+                <a href="{{ url_for('document.index', doc_url=p.doc_url, _external=True) }}">
+                    {{ url_for('document.index', doc_url=p.doc_url, _external=True) }}
+                </a>
+
+            </div>
+            <form method=POST enctype=multipart/form-data action="{{ url_for('user.document_update') }}">
+
+                <label for="text-input"></label>
+                <textarea id="text-input" oninput="this.editor.update()"
+                          class="form-control" rows="20" name="detail">{{ p.detail }}</textarea>
+                <hr>
+                <button class="btn btn-success btn-block">保存</button>
+            </form>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div id="preview"></div>
+        </div>
+    </div>
+    <script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>
+    <script>
+        function Editor(input, preview) {
+            this.update = function () {
+                preview.innerHTML = markdown.toHTML(input.value);
+            };
+            input.editor = this;
+            this.update();
+        }
+        const log = function log() {
+            console.log.apply(console, arguments);
+        }
+        function ajaxFormSubmit() {
+            let ajaxForm = $(event.target)
+            ajaxForm.ajaxSubmit(function (message) {
+                if (message.success == true) {
+                    let data = {
+                        key: ajaxForm.data('key')
+                    }
+                    let url = ajaxForm.data('url')
+                    $.post(url, data, function () {
+                        location.reload()
+                    })
+                }
+            });
+            return false;
+        }
+        new Editor(document.getElementById("text-input"), document.getElementById("preview"));
+    </script>
+{% endblock %}

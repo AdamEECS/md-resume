@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block body %}
+<ol class="breadcrumb">
+    <li><a href="{{ url_for('admin.users') }}">User Manage</a></li>
+    <li class="active">User Profile</li>
+</ol>
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <h3>基本信息</h3>
+        <div class="panel-profile">
+            <form method=POST enctype=multipart/form-data action="{{ url_for('admin.user_update', id=m.id) }}">
+                <label for="id-name">用户名</label>
+                <input class="form-control" name="username" id=id-name value="{{ m.username }}">
+                <label for="id-password">修改密码</label>
+                <input class="form-control" name=password id=id-password>
+                <label for="id-re-password">重复密码</label>
+                <input class="form-control" name=re_password id=id-re-password>
+                <hr>
+                <button class="btn btn-success btn-block">修改基本信息</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <h3>邮箱信息</h3>
+        <div class="panel-profile">
+            <form method=POST enctype=multipart/form-data action="{{ url_for('admin.user_update', id=m.id) }}">
+                <label for="id-email">邮箱地址</label>
+                <input class="form-control" name="email" id=id-email value="{{ m.email }}">
+                <label for="id-email-verfiy">验证状态</label>
+                <select name="email_verify" class="form-control"id=id-email-verfiy >
+                    <option value=true {% if m.email_verify %} selected {% endif %}>通过</option>
+                    <option value=false {% if not m.email_verify %} selected {% endif %}>未验证</option>
+                </select>
+                <hr>
+                <button class="btn btn-info btn-block">修改邮箱信息</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<hr>
+
+{% endblock %}

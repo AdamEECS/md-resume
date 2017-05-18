@@ -6,29 +6,21 @@ class Document(MongoModel):
     @classmethod
     def _fields(cls):
         fields = [
-            ('name', str, ''),
-            ('price', str, ''),
-            ('pic', str, ''),
+            ('user_uuid', str, ''),
+            ('doc_url', str, ''),
+            ('title', str, ''),
+            ('public', bool, False),
             ('detail', str, ''),
         ]
         fields.extend(super()._fields())
         return fields
 
     @classmethod
-    def valid(cls, form):
-        name = form.get('name', '')
-        valid_name = cls.find_one(name=name) is None
-        msgs = []
-        if not valid_name:
-            message = '商品已经存在'
-            msgs.append(message)
-        status = valid_name
-        return status, msgs
-
-    @classmethod
     def new(cls, form):
         m = super().new(form)
-        m.qiniu_pic()
+        from uuid import uuid4
+        m.set_uuid(field='doc_url', seed=uuid4)
+        m.save()
         return m
 
     def update_pic(self, pic):

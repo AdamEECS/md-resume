@@ -29,18 +29,13 @@ class User(MongoModel):
     def _fields(cls):
         fields = [
             ('username', str, ''),
-            ('nickname', str, ''),
             ('email', str, ''),
             ('email_verify', bool, False),
             ('email_token', str, ''),
             ('email_token_exp', int, 0),
             ('password', str, ''),
-            ('avatar', str, 'default.png'),
             ('role', str, 'client'),
             ('salt', str, 'q43129dhs*3'),
-            ('cart', dict, {}),
-            ('add_list', list, []),
-            ('add_default', int, 0),
         ]
         fields.extend(super()._fields())
         return fields
@@ -68,11 +63,8 @@ class User(MongoModel):
         return self
 
     def safe_update_user(self, form):
-        username = form.get('username', '')
         password = form.get('password', '')
         re_password = form.get('re_password', '')
-        if len(username) > 0:
-            self.username = username
         if len(password) > 0 and password == re_password:
             self.password = self.salted_password(password)
         self.save()
@@ -193,6 +185,29 @@ class User(MongoModel):
         return self.email_verify
 
     @classmethod
+    def forget_password(cls, form):
+        username = form.get('username')
+        email = form.get('email')
+        u = cls.find_one(username=username)
+        if u is not None and u.email_verified() and u.email == email:
+            tb64 = u.set_token(email)
+            send_password_email(email, tb64)
+            return True
+        return False
+
+    @classmethod
+    def forget_password_verify(cls, tb64):
+        s = cls.safe_decode_b64(tb64)
+        if s is None:
+            return False
+        uuid, token_sha1 = s.split('-', 1)
+        u = cls.get_uuid(uuid)
+        if u.email_token_valid(token_sha1):
+            return True
+        else:
+            return False
+
+    @classmethod
     def get_user_by_tb64(cls, tb64):
         s = cls.safe_decode_b64(tb64)
         if s is None:
@@ -203,6 +218,12 @@ class User(MongoModel):
             return u
         else:
             return None
+
+    def reset_password(self, password):
+        self.password = self.salted_password(password)
+        self.save()
+        self.clear_token()
+        return self
 
     def clear_token(self):
         self.email_token = ''

@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>施煜</title>
+    <title>
+        {% block title %}
+        简历生成器 - Power by Suzumiya
+        {% endblock %}
+    </title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
@@ -45,15 +49,9 @@
             </div>
 
             <div class="collapse navbar-collapse" id="base-nav-collapse-1">
-                <form class="navbar-form navbar-left" action="{{ url_for('index.index') }}" method="post">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="id-input-send-email" name="search" placeholder="输入邮箱地址以获取副本">
-                        <input name="captcha" class="form-control" placeholder="验证码" autocomplete="off" required>
-                        <img onclick="this.setAttribute('src','/img/captcha/s?nocache='+Math.random());"
-                 src="/img/captcha/s" alt="Captcha" class="right"/>
-                    </div>
-                    <button type="submit" class="btn btn-default">发送PDF到邮箱</button>
-                </form>
+            {% block head_send_email %}
+            {% endblock %}
+            {% block head_login %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if u %}
                         {% if u.role=='admin' %}
@@ -63,11 +61,20 @@
                                     管理员: {{ u.role }}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a class="" href="{{ url_for('admin.document') }}">档案管理</a></li>
-
+                                    <li><a class="" href="{{ url_for('admin.users') }}">用户管理</a></li>
                                 </ul>
                             </li>
                         {% endif %}
-
+                        <li class="dropdown">
+                            <a class="dropdown-toggle"
+                               data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                欢迎，{{ u.username }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="" href="{{ url_for('user.profile') }}">个人资料</a></li>
+                                <li><a class="" href="{{ url_for('user.document') }}">我的简历</a></li>
+                                <li><a class="" href="{{ url_for('user.auth') }}">授权管理</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a class="block-center" href="{{ url_for('user.logout') }}">
                                 <span class="glyphicon glyphicon-off"></span> 登出
@@ -86,6 +93,7 @@
                         </li>
                     {% endif %}
                 </ul>
+                {% endblock %}
             </div>
         </div>
     </nav>

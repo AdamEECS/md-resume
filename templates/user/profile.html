@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block body %}
+<div>
+    <h1>Profile</h1>
+</div>
+<div class="panel panel-default panel-profile">
+    <div class="panel-heading">用户名及密码</div>
+    <div class="panel-body">
+        <form method=POST enctype=multipart/form-data action="{{ url_for('user.profile_update') }}">
+            <label for="id-name">用户名</label>
+            <input class="form-control" name="username" id=id-name value="{{ u.username }}" readonly>
+            <label for="id-password">修改密码</label>
+            <input class="form-control" name=password id=id-password>
+            <label for="id-re-password">重复密码</label>
+            <input class="form-control" name=re_password id=id-re-password>
+            <hr>
+            <button class="btn btn-success btn-block">更新</button>
+        </form>
+    </div>
+
+</div>
+<div class="panel panel-default panel-profile">
+    <div class="panel-heading">邮箱信息</div>
+    <div class="panel-body">
+
+        <div id=id-div-email-info>
+            <label>
+            邮箱
+            <div class="">
+            {{ u.email }}
+            </div>
+            </label>
+
+            <label>
+            验证状态
+            {% if u.email_verify %}
+            <p class="text-success">
+                通过
+            </p>
+            {% else %}
+            <p class="text-danger">
+            未验证
+            </p>
+            {% endif %}
+            </label>
+            <br>
+            <button class="btn btn-info btn-block button-re-verify" id=id-button-re-verify>更新验证</button>
+        </div>
+
+        <div id="id-div-email-update" class="" hidden>
+            <form method="post" action="{{ url_for('user.update_email') }}" onsubmit="return ajaxFormSubmit()">
+                <div class="group-inputs">
+                    <input name="password" type=password placeholder="密码" required>
+                    <input name="email" placeholder="新邮箱" required>
+                    <input name="captcha" placeholder="验证码（不区分大小写）" autocomplete="off" required>
+                </div>
+                <img onclick="this.setAttribute('src','/img/captcha?nocache='+Math.random());" src="/img/captcha" alt="Captcha" class="" />
+                <br>
+                <button class="btn btn-info btn-block" id=id-button-verify type=submit>获取验证邮件</button>
+                <button class="btn btn-default btn-block button-re-verify" type=button>取消更新</button>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+{% endblock %}

@@ -205,13 +205,15 @@ class User(MongoModel):
         count = db[name].find(query).count()
         return count
 
-    def set_uuid(self, field='uuid'):
-        new_uuid = short_uuid()
+    def set_uuid(self, field='uuid', seed=short_uuid):
+        new_uuid = str(seed())
         kwargs = {
             field: new_uuid,
         }
         while self.__class__.has(**kwargs):
-            new_uuid = short_uuid()
+            new_uuid = str(seed())
             kwargs[field] = new_uuid
         setattr(self, field, new_uuid)
         self.save()
+
+
