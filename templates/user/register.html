@@ -7,7 +7,7 @@
         <div class="group-inputs">
             <input name="username" id="id-input-username" placeholder="用户名" required>
             <input name="password" id="id-input-password" placeholder="密码" required>
-            <input name="email" id="id-input-email" placeholder="邮箱" required>
+            <input name="email" type="email" id="id-input-email" placeholder="邮箱" required>
             <input name="captcha" id="id-input-captcha" placeholder="验证码（不区分大小写）" autocomplete="off" required>
             <img onclick="this.setAttribute('src','/img/captcha?nocache='+Math.random());"
                  src="/img/captcha" alt="Captcha" class="right"/>

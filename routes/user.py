@@ -27,7 +27,7 @@ def login():
     u = User.find_one(username=username)
     if u is not None and u.validate_login(form):
         session['uid'] = u.id
-        return redirect(url_for('index.index'))
+        return redirect(url_for('user.profile'))
     else:
         flash('用户名密码错误', 'warning')
         return redirect(url_for('user.index'))
@@ -51,7 +51,7 @@ def register():
         u.send_email_verify(u.email)
         session['uid'] = u.id
         flash('验证邮件已发送，请查收', 'info')
-        return redirect(url_for('index.index'))
+        return redirect(url_for('user.profile'))
     else:
         for msg in msgs:
             flash(msg, 'warning')
@@ -105,7 +105,7 @@ def reset_password(tb64):
         u.reset_password(password)
         session['uid'] = u.id
         flash('密码已重置', 'success')
-        return redirect(url_for('index.index'))
+        return redirect(url_for('user.profile'))
     else:
         flash('重置邮件验证失败', 'warning')
         return redirect(url_for('user.index'))
@@ -126,7 +126,7 @@ def logout():
     p = session.pop('uid')
     print('logout: pop uid', p)
     flash('账号已安全退出', 'success')
-    return redirect(url_for('index.index'))
+    return redirect(url_for('user.login'))
 
 
 @main.route('/profile')
