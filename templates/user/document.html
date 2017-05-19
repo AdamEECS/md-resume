@@ -12,10 +12,41 @@
                     {{ url_for('document.index', doc_url=p.doc_url, _external=True) }}
                 </a>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading toggle-panel-heading">
+                    上传图片
+                    <span class="glyphicon glyphicon-chevron-down right"></span>
+                </div>
+                <div class="panel-body" hidden>
+                    <form method="post" enctype="multipart/form-data" action="{{ url_for('user.pic_upload') }}"
+                          onsubmit="return ajaxPicUpload();">
+                        <input name="pic" type="file" class="form-control" id="id-input-file-pic-upload" required>
+                        <button class="btn btn-success">上传图片</button>
+                    </form>
+                    <div class="img-upload-item-container">
+                    {% for i in u.pics_url %}
+                        <div class="img-upload-item" data-name="{{ i }}">
+                            <img src="{{ i }}" alt="" class="img-user-pic-preview">
+                            <div class="right img-url-text">
+                                <div>{{ i }}</div>
+                                <a href="#" class="btn btn-danger btn-xs right btn-img-del">删除</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
             <form method=POST enctype=multipart/form-data action="{{ url_for('user.document_update') }}">
-                <label for="css-input">自定义CSS</label>
-                <textarea id="css-input"
-                          class="form-control" rows="8" name="css">{{ p.css }}</textarea>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading toggle-panel-heading">
+                        自定义CSS
+                        <span class="glyphicon glyphicon-chevron-down right"></span>
+                    </div>
+                    <div class="panel-body" hidden>
+                        <textarea class="form-control" rows="8" name="css">{{ p.css }}</textarea>
+                    </div>
+                </div>
                 <label for="text-input">简历内容</label>
                 <textarea id="text-input" oninput="this.editor.update()"
                           class="form-control" rows="20" name="detail">{{ p.detail }}</textarea>
@@ -29,32 +60,6 @@
         </div>
     </div>
     <script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>
-    <script>
-        function Editor(input, preview) {
-            this.update = function () {
-                preview.innerHTML = markdown.toHTML(input.value);
-            };
-            input.editor = this;
-            this.update();
-        }
-        const log = function log() {
-            console.log.apply(console, arguments);
-        }
-        function ajaxFormSubmit() {
-            let ajaxForm = $(event.target)
-            ajaxForm.ajaxSubmit(function (message) {
-                if (message.success == true) {
-                    let data = {
-                        key: ajaxForm.data('key')
-                    }
-                    let url = ajaxForm.data('url')
-                    $.post(url, data, function () {
-                        location.reload()
-                    })
-                }
-            });
-            return false;
-        }
-        new Editor(document.getElementById("text-input"), document.getElementById("preview"));
-    </script>
+    <script src="{{ url_for('static', filename='js/document.js') }}"></script>
+
 {% endblock %}

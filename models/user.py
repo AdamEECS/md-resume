@@ -31,6 +31,7 @@ class User(MongoModel):
             ('password', str, ''),
             ('role', str, 'client'),
             ('salt', str, 'q43129dhs*3'),
+            ('pics', list, []),
         ]
         fields.extend(super()._fields())
         return fields
@@ -109,6 +110,25 @@ class User(MongoModel):
             self.avatar = 'default.png'
         self.save()
         return self
+
+    def pic_upload(self, pic):
+        allowed_type = app.config['ALLOWED_UPLOAD_TYPE']
+        if pic.filename != '' and pic.filename.split('.')[-1] in allowed_type and len(self.pics) <= 20:
+            path = app.config['USER_PIC_DIR']
+            filename = '{}_{}.{}'.format(self.uuid, timestamp(), app.config['PRODUCT_PIC_EXT'])
+            pic.save(path + filename)
+            self.pics.append(filename)
+            self.save()
+            return '/' + path + filename
+        else:
+            return False
+
+    def pic_del(self, pic):
+        self.pics.remove(pic)
+        self.save()
+        import os
+        os.remove(os.path.join(app.config['USER_PIC_DIR'], pic))
+        return True
 
     def update_dict(self, **kwargs):
         for k, v in kwargs.items():

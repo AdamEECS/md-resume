@@ -29,7 +29,7 @@ class Document(MongoModel):
         allowed_type = ['jpg', 'jpeg', 'gif', 'png']
         upload_name = pic.filename
         if upload_name != '' and upload_name.split('.')[-1] in allowed_type:
-            path = app.config['PRODUCT_PIC_DIR']
+            path = app.config['USER_PIC_DIR']
             ext = app.config['PRODUCT_PIC_EXT']
             fullname = '{}{}.{}'.format(path, str(self.id), ext)
             pic.save(fullname)

@@ -165,10 +165,33 @@ def update_email():
         return json.dumps({'status': 'warning', 'msg': '密码错误'})
 
 
+@main.route('/pic/upload', methods=['POST'])
+@login_required
+def pic_upload():
+    u = current_user()
+    pic = request.files['pic']
+    pic = u.pic_upload(pic)
+    if pic is not False:
+        return json.dumps({'status': 'success', 'msg': '上传成功：' + pic, 'pic': pic})
+    else:
+        return json.dumps({'status': 'danger', 'msg': '上传失败'})
+
+
+@main.route('/pic/del', methods=['POST'])
+@login_required
+def pic_del():
+    u = current_user()
+    pic = request.json.get('pic')
+    u.pic_del(pic)
+    return json.dumps({'status': 'success', 'msg': '已删除：' + pic})
+
+
 @main.route('/document')
 @login_required
 def document():
     u = current_user()
+    u.pics_url = [url_for('static', filename='user_pic/'+pic) for pic in u.pics]
+    u.pics_url.reverse()
     p = Document.find_one(user_uuid=u.uuid)
     return render_template('user/document.html', p=p, u=u)
 

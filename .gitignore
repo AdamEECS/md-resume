@@ -101,3 +101,4 @@ static/emoji/
 # avatar
 static/user_avatar/*_*.png
 static/product_pic/*.png
+static/user_pic/*.png
