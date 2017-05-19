@@ -134,7 +134,7 @@ def logout():
 def profile():
     u = current_user()
     d = Document.find_one(user_uuid=u.uuid)
-    d.doc_url_full_path = app.config['BASE_URL'] + d.doc_url
+    d.doc_url_full_path = app.config['DOC_URL'] + d.doc_url
     return render_template('user/profile.html', u=u, d=d)
 
 
@@ -194,7 +194,7 @@ def document():
     u.pics_url = [app.config['BASE_URL'] + app.config['USER_PIC_DIR'] + pic for pic in u.pics]
     u.pics_url.reverse()
     d = Document.find_one(user_uuid=u.uuid)
-    d.doc_url_full_path = app.config['BASE_URL'] + d.doc_url
+    d.doc_url_full_path = app.config['DOC_URL'] + d.doc_url
     return render_template('user/document.html', p=d, u=u)
 
 
