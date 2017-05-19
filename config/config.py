@@ -7,7 +7,7 @@ config_dict = dict(
     PRODUCT_PIC_EXT='png',
     SEND_EMAIL_URL='https://api.mailgun.net/v3/mg.suzumiya.cc/messages',
     SEND_EMAIL_FROM='Suzumiya <no-replay@mg.suzumiya.cc>',
-    BASE_URL='http://localhost:8003',
+    BASE_URL='https://career.suzumiya.cc/',
     MAX_CONTENT_LENGTH=2 * 1024 * 1024,
     ALLOWED_UPLOAD_TYPE=['jpg', 'jpeg', 'gif', 'png', 'ico'],
 )

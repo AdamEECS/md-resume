@@ -1,5 +1,6 @@
 from . import MongoModel
 from . import bool_dict
+from models.mail import send_document
 from flask import current_app as app
 
 
@@ -50,3 +51,9 @@ class Document(MongoModel):
             form.pop('doc_url')
         self.update(form)
         return self
+
+    def send_email(self, email):
+        import markdown2
+        detail_html = markdown2.markdown(self.detail)
+        html = '<div id="preview">{}</div><style>{}</style>'.format(detail_html, self.css)
+        send_document(email, self.title, html)

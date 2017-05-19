@@ -46,10 +46,11 @@ class Auth(MongoModel):
         else:
             return False
 
-    def used(self, request, success=True):
+    def used(self, request, success=True, mode='Web'):
         form = dict(
             token=self.token,
             user_uuid=self.user_uuid,
+            mode=mode,
             doc_uuid=self.doc_uuid,
             platform=request.user_agent.platform,
             browser=request.user_agent.browser,

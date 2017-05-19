@@ -119,7 +119,7 @@ class User(MongoModel):
             pic.save(path + filename)
             self.pics.append(filename)
             self.save()
-            return '/' + path + filename
+            return app.config['BASE_URL'] + path + filename
         else:
             return False
 

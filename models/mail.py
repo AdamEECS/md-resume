@@ -35,3 +35,6 @@ def send_password_email(email, tb64):
     body = "Click to reset your password: <a href='{0}'>{0}</a>".format(url)
     send(email, 'Reset Password', body)
 
+
+def send_document(email, title, html):
+    send(email, title, html)

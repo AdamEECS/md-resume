@@ -305,6 +305,8 @@ label {
 }
 .img-url-text {
     padding-top: 20px;
+    word-break: break-all;
+    width: 300px;
 }
 
 /*       -----------购物车局部css开始-----------     */

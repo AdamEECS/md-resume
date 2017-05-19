@@ -190,7 +190,7 @@ def pic_del():
 @login_required
 def document():
     u = current_user()
-    u.pics_url = [url_for('static', filename='user_pic/'+pic) for pic in u.pics]
+    u.pics_url = [app.config['BASE_URL'] + app.config['USER_PIC_DIR'] + pic for pic in u.pics]
     u.pics_url.reverse()
     p = Document.find_one(user_uuid=u.uuid)
     return render_template('user/document.html', p=p, u=u)

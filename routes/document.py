@@ -26,7 +26,38 @@ def protected(doc_url, token):
         a.used(request, success=True)
         text = '面试者对您的访问授权剩余{}次，授权过期时间：{}'.format(a.token_times, time_str(a.token_exp))
         flash(text, 'success')
-        return render_template('document.html', d=d, u=u)
+        return render_template('document.html', d=d, u=u, token=token)
     else:
         a.used(request, success=False)
+        abort(401)
+
+
+@main.route('/<doc_url>/mail', methods=['POST'])
+def send_mail(doc_url):
+    u = current_user()
+    form = request.form
+    captcha = form.get('captcha', '').lower()
+    email = form.get('email')
+    token = form.get('token', '')
+    if captcha != session.get('captcha', 'no captcha!'):
+        flash('验证码错误!', 'warning')
+        if len(token) == 0:
+            return redirect(url_for('document.index', doc_url=doc_url))
+        else:
+            return redirect(url_for('document.protected', doc_url=doc_url, token=token))
+    d = Document.find_one(doc_url=doc_url)
+    a = Auth.find_one(token=token, doc_uuid=d.uuid)
+    public_valid = d.public is True
+    owner_valid = u is not None and d.user_uuid == u.uuid
+    token_valid = a is not None and a.verify()
+    if public_valid or owner_valid:
+        d.send_email(email)
+        flash('邮件已发送，未收到请检查垃圾箱。', 'success')
+        return redirect(url_for('document.index', doc_url=doc_url))
+    elif token_valid:
+        d.send_email(email)
+        a.used(request, success=True, mode='Send Email')
+        flash('邮件已发送，未收到请检查垃圾箱。', 'success')
+        return redirect(url_for('document.protected', doc_url=doc_url, token=token))
+    else:
         abort(401)
