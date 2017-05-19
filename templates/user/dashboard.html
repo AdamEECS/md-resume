@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+
+    <div class="page-header">
+        <h1>My Dashboard
+            <small>Welcome to Suzumiya Career Center!</small>
+        </h1>
+    </div>
+
+    <div class="well well-padding-width">
+        <h2>个人设置</h2>
+        <h3><small>修改密码、验证邮箱、设置简历Title、URL、是否公开。</small></h3>
+        <p><a class="btn btn-primary btn-lg" href="{{ url_for('user.profile') }}" role="button">点击进入</a></p>
+    </div>
+
+    <div class="well well-padding-width">
+        <h2>我的简历</h2>
+        <h3><small>使用Markdown语法编辑简历内容，支持自定义CSS，支持上传图片（每人上限20张，单个不超过2MB）。</small></h3>
+        <p><a class="btn btn-primary btn-lg" href="{{ url_for('user.document') }}" role="button">点击进入</a></p>
+    </div>
+
+    <div class="well well-padding-width">
+        <h2>授权管理</h2>
+        <h3><small>对于私有简历，生成授权码以允许对方查看，并可设置授权次数及有效期限。
+            <br>「生成多个授权码发给不同申请单位，即可据此追踪访问者的足迹！」</small></h3>
+        <p><a class="btn btn-primary btn-lg" href="{{ url_for('user.auths') }}" role="button">点击进入</a></p>
+    </div>
+
+{% endblock %}

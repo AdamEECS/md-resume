@@ -13,6 +13,8 @@ Model = User
 
 @main.route('/login')
 def index():
+    if current_user() is not None:
+        return redirect(url_for('user.dashboard'))
     return render_template('user/login.html')
 
 
@@ -27,7 +29,7 @@ def login():
     u = User.find_one(username=username)
     if u is not None and u.validate_login(form):
         session['uid'] = u.id
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('user.dashboard'))
     else:
         flash('用户名密码错误', 'warning')
         return redirect(url_for('user.index'))
@@ -35,6 +37,8 @@ def login():
 
 @main.route('/register')
 def register_page():
+    if current_user() is not None:
+        return redirect(url_for('user.dashboard'))
     return render_template('user/register.html')
 
 
@@ -51,7 +55,7 @@ def register():
         u.send_email_verify(u.email)
         session['uid'] = u.id
         flash('验证邮件已发送，请查收', 'info')
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('user.dashboard'))
     else:
         for msg in msgs:
             flash(msg, 'warning')
@@ -60,6 +64,8 @@ def register():
 
 @main.route('/password/forget')
 def forget_password():
+    if current_user() is not None:
+        return redirect(url_for('user.dashboard'))
     return render_template('user/forget_password.html')
 
 
@@ -127,6 +133,13 @@ def logout():
     print('logout: pop uid', p)
     flash('账号已安全退出', 'success')
     return redirect(url_for('user.login'))
+
+
+@main.route('/dashboard')
+@login_required
+def dashboard():
+    u = current_user()
+    return render_template('user/dashboard.html', u=u)
 
 
 @main.route('/profile')

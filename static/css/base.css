@@ -308,6 +308,10 @@ label {
     word-break: break-all;
     width: 300px;
 }
+.well-padding-width {
+    padding-left: 60px;
+    padding-right: 60px;
+}
 
 /*       -----------购物车局部css开始-----------     */
 .stepflex {
