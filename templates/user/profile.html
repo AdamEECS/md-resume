@@ -80,7 +80,7 @@
                         <input class="form-control" name=doc_url id=id-doc-url value="{{ d.doc_url }}">
                         <label>预览URL</label>
                         <a href="#">
-                            {{ url_for('document.index', doc_url=d.doc_url, _external=True) }}
+                            {{ d.doc_url_full_path }}
                         </a>
                         <label for="id-doc-public">授权访问</label>
                         <select name="public" class="form-control" id=id-doc-public>

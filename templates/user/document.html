@@ -8,8 +8,8 @@
         <div class="col-xs-12 col-sm-6">
             <div class="">
                 简历地址：
-                <a href="{{ url_for('document.index', doc_url=p.doc_url, _external=True) }}">
-                    {{ url_for('document.index', doc_url=p.doc_url, _external=True) }}
+                <a href="{{ p.doc_url_full_path }}">
+                    {{ p.doc_url_full_path }}
                 </a>
             </div>
             <div class="panel panel-default">
