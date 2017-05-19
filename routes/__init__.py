@@ -43,3 +43,12 @@ def admin_required(f):
     return function
 
 
+def email_verify_required(f):
+    @wraps(f)
+    def function(*args, **kwargs):
+        if not current_user().email_verified():
+            flash('邮箱未验证，请先验证邮箱', 'warning')
+            return redirect(url_for('user.profile'))
+        return f(*args, **kwargs)
+
+    return function

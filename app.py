@@ -14,12 +14,14 @@ def register_routes(app):
     from routes.admin import main as routes_admin
     from routes.img import main as routes_img
     from routes.document import main as routes_document
+    from routes.demo import main as routes_demo
 
     app.register_blueprint(routes_user, url_prefix='/user')
     app.register_blueprint(routes_index, url_prefix='/')
     app.register_blueprint(routes_admin, url_prefix='/admin')
     app.register_blueprint(routes_img, url_prefix='/img')
     app.register_blueprint(routes_document, url_prefix='/doc')
+    app.register_blueprint(routes_demo, url_prefix='/demo')
 
 
 def register_filters(app):

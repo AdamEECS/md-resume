@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="">
+        <h1>Auths Manage</h1>
+
+    </div>
+    <form class="navbar-form " action="{{ url_for('user.auths_search') }}" method="post">
+        <input type="text" class="form-control" name="token" placeholder="按token检索">
+        <input type="text" class="form-control" name="comment" placeholder="按备注检索">
+        <button type="submit" class="btn btn-default">Search</button>
+    </form>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="th-col-2">授权码</th>
+            <th class="th-col-1">用户</th>
+            <th class="th-col-2">备注</th>
+            <th class="th-col-1">访问次数</th>
+            <th class="th-col-1">剩余次数</th>
+            <th class="th-col-2">过期时间</th>
+            <th class="th-col-1">状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for a in ms %}
+            <tr data-id={{ a.token }}>
+                <td>
+                    <a href="{{ url_for('user.auth', token=a.token) }}">{{ a.token }}</a>
+                </td>
+                <td>{{ a.user.username }}</td>
+                <td>{{ a.comment }}</td>
+                <td>{{ a.visited_times }}</td>
+                <td>{{ a.token_times }}</td>
+                <td>{{ a.token_exp|time_str }}</td>
+                <td>
+                    {% if a.verified %}
+                        <p class="text-success">生效中</p>
+                    {% else %}
+                        <p class="text-danger">已失效</p>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

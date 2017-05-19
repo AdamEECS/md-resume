@@ -221,6 +221,7 @@ def document_setting():
 
 @main.route('/auths')
 @login_required
+@email_verify_required
 def auths():
     u = current_user()
     auths = Auth.find(user_uuid=u.uuid)
@@ -244,6 +245,7 @@ def auths_search():
 
 @main.route('/auth/new')
 @login_required
+@email_verify_required
 def auth_new():
     u = current_user()
     d = Document.find_one(user_uuid=u.uuid)
@@ -257,6 +259,7 @@ def auth_new():
 
 @main.route('/auth/<token>')
 @login_required
+@email_verify_required
 def auth(token):
     u = current_user()
     d = Document.find_one(user_uuid=u.uuid)

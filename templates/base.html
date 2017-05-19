@@ -60,8 +60,9 @@
                                    data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     管理员<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="" href="{{ url_for('admin.document') }}">档案管理</a></li>
+                                    <li><a class="" href="{{ url_for('admin.documents') }}">文档管理</a></li>
                                     <li><a class="" href="{{ url_for('admin.users') }}">用户管理</a></li>
+                                    <li><a class="" href="{{ url_for('admin.auths') }}">授权管理</a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -70,7 +71,7 @@
                                data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 欢迎，{{ u.username }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="" href="{{ url_for('user.profile') }}">个人资料</a></li>
+                                <li><a class="" href="{{ url_for('user.profile') }}">个人设置</a></li>
                                 <li><a class="" href="{{ url_for('user.document') }}">我的简历</a></li>
                                 <li><a class="" href="{{ url_for('user.auths') }}">授权管理</a></li>
                             </ul>
