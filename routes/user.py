@@ -276,6 +276,7 @@ def auth_new():
 def auth(token):
     u = current_user()
     d = Document.find_one(user_uuid=u.uuid)
+    d.base_url = app.config['BASE_URL'][:-1]
     a = Auth.find_one(token=token)
     a.verified = a.verify()
     history = Access.find(token=token, user_uuid=u.uuid)

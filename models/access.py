@@ -18,6 +18,7 @@ class Access(MongoModel):
             ('version', str, ''),
             ('user_agent', str, ''),
             ('access_route', list, []),
+            ('ip', str, ''),
             ('success', bool, False),
         ]
         fields.extend(super()._fields())

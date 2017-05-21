@@ -47,6 +47,10 @@ class Auth(MongoModel):
             return False
 
     def used(self, request, success=True, mode='Web'):
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            ip = request.remote_addr
         form = dict(
             token=self.token,
             user_uuid=self.user_uuid,
@@ -57,6 +61,7 @@ class Auth(MongoModel):
             version=request.user_agent.version,
             user_agent=request.user_agent.string,
             access_route=[i for i in request.access_route],
+            ip=ip,
             success=success,
         )
         Access.new(form)
