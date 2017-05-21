@@ -47,7 +47,7 @@
             <div class="row panel {% if i.success %} panel-success {% else %} panel-danger {% endif %}">
                 <div class="panel-heading">访问时间：{{ i.ct|time_str }} 授权通过：{{ i.success }}</div>
                 <div class="panel-body ">
-                    <div> 访问方式：{{ i.mode }} </div>
+                    <div> 访问方式：{{ i.mode }} {{ i.email }}</div>
                     <div> 操作系统：{{ i.platform }} </div>
                     <div> 浏览器：{{ i.browser }} {{ i.version }} </div>
                     <div> 访问来源：{{ i.ip }} </div>

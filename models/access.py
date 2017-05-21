@@ -13,6 +13,7 @@ class Access(MongoModel):
             ('user_uuid', str, ''),
             ('doc_uuid', str, ''),
             ('mode', str, ''),
+            ('email', str, ''),
             ('platform', str, ''),
             ('browser', str, ''),
             ('version', str, ''),

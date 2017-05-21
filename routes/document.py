@@ -52,7 +52,7 @@ def send_mail(doc_url):
 
     elif token_valid:
         d.send_email(email)
-        a.used(request, success=True, mode='Send Email')
+        a.used(request, success=True, mode='Send Email', email=email)
         return json.dumps({'status': 'success', 'msg': '邮件已发送，未收到请检查垃圾箱。本次请求已消耗您的授权1次。'})
     else:
         return json.dumps({'status': 'warning', 'msg': '您的请求未获得授权。'})
