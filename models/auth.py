@@ -56,8 +56,7 @@ class Auth(MongoModel):
             browser=request.user_agent.browser,
             version=request.user_agent.version,
             user_agent=request.user_agent.string,
-            access_route=[i for i in request.access_route],
-            ip=request.headers.getlist("X-real-ip"),
+            ip=request.headers.get("X-real-ip"),
             x_forwarded_for=request.headers.getlist("X-Forwarded-For"),
             success=success,
         )

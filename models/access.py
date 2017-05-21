@@ -17,7 +17,6 @@ class Access(MongoModel):
             ('browser', str, ''),
             ('version', str, ''),
             ('user_agent', str, ''),
-            ('access_route', list, []),
             ('ip', str, ''),
             ('x_forwarded_for', str, ''),
             ('success', bool, False),
