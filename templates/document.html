@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block head_send_email %}
-    <form class="navbar-form navbar-left" action="{{ url_for('document.send_mail', doc_url=d.doc_url) }}" method="post">
+    <form class="navbar-form navbar-left" action="{{ url_for('document.send_mail', doc_url=d.doc_url) }}" method="post" onsubmit="return ajaxSendMail();">
         <div class="form-group">
             <input type="email" class="form-control" id="id-input-send-email" name="email"
                    placeholder="输入邮箱地址以获取副本" required>
@@ -54,5 +54,31 @@
         }
 
         new Editor(document.getElementById("text-input"), document.getElementById("preview"));
+
+        let template = function (r) {
+            let div = `
+<div class="alert alert-${r.status} alert-dismissible" role="alert" >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    ${r.msg}
+</div>`
+            return div
+        }
+
+        function ajaxSendMail() {
+            let ajaxForm = $(event.target)
+            ajaxForm.ajaxSubmit({
+                success: function (message) {
+                    r = JSON.parse(message)
+
+                    $('.alert-container').append(template(r))
+                    $('.alert').delay(2000).fadeOut(600)
+                },
+
+                clearForm: true,
+            });
+            return false;
+        }
     </script>
 {% endblock %}

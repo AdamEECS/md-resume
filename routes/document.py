@@ -40,11 +40,7 @@ def send_mail(doc_url):
     email = form.get('email')
     token = form.get('token', '')
     if captcha != session.get('captcha', 'no captcha!'):
-        flash('验证码错误!', 'warning')
-        if len(token) == 0:
-            return redirect(url_for('document.index', doc_url=doc_url))
-        else:
-            return redirect(url_for('document.protected', doc_url=doc_url, token=token))
+        return json.dumps({'status': 'warning', 'msg': '验证码错误!'})
     d = Document.find_one(doc_url=doc_url)
     a = Auth.find_one(token=token, doc_uuid=d.uuid)
     public_valid = d.public is True
@@ -52,12 +48,11 @@ def send_mail(doc_url):
     token_valid = a is not None and a.verify()
     if public_valid or owner_valid:
         d.send_email(email)
-        flash('邮件已发送，未收到请检查垃圾箱。', 'success')
-        return redirect(url_for('document.index', doc_url=doc_url))
+        return json.dumps({'status': 'success', 'msg': '邮件已发送，未收到请检查垃圾箱。'})
+
     elif token_valid:
         d.send_email(email)
         a.used(request, success=True, mode='Send Email')
-        flash('邮件已发送，未收到请检查垃圾箱。', 'success')
-        return redirect(url_for('document.protected', doc_url=doc_url, token=token))
+        return json.dumps({'status': 'success', 'msg': '邮件已发送，未收到请检查垃圾箱。本次请求已消耗您的授权1次。'})
     else:
-        abort(401)
+        return json.dumps({'status': 'warning', 'msg': '您的请求未获得授权。'})
