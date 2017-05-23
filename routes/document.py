@@ -56,3 +56,11 @@ def send_mail(doc_url):
         return json.dumps({'status': 'success', 'msg': '邮件已发送，未收到请检查垃圾箱。本次请求已消耗您的授权1次。'})
     else:
         return json.dumps({'status': 'warning', 'msg': '您的请求未获得授权。'})
+
+
+# @main.route('/mail')
+# def send_mail_test():
+#     from models.mail import send_by_sendcloud
+#     send_by_sendcloud()
+#
+#     return json.dumps({'status': 'warning', 'msg': '您的请求未获得授权。'})
