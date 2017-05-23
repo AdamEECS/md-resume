@@ -23,7 +23,7 @@ def login():
     form = request.form
     username = form.get('username', '')
     captcha = form.get('captcha', '').lower()
-    if captcha != session.get('captcha', 'no captcha!'):
+    if captcha != session.pop('captcha', 'no captcha!'):
         flash('验证码错误', 'warning')
         return redirect(url_for('user.index'))
     u = User.find_one(username=username)
@@ -46,7 +46,7 @@ def register_page():
 def register():
     form = request.form
     captcha = form.get('captcha', '').lower()
-    if captcha != session.get('captcha', 'no captcha!'):
+    if captcha != session.pop('captcha', 'no captcha!'):
         flash('验证码错误', 'warning')
         return redirect(url_for('user.register'))
     status, msgs = User.valid(form)
@@ -73,7 +73,7 @@ def forget_password():
 def forget_password_send():
     form = request.form
     captcha = form.get('captcha', '').lower()
-    if captcha != session.get('captcha', 'no captcha!'):
+    if captcha != session.pop('captcha', 'no captcha!'):
         flash('验证码错误', 'warning')
         return redirect(url_for('user.forget_password'))
     r = User.forget_password(form)
@@ -168,7 +168,7 @@ def update_email():
     form = request.form
     new_email = form.get('email', '')
     captcha = form.get('captcha', '').lower()
-    if captcha != session.get('captcha', 'no captcha!'):
+    if captcha != session.pop('captcha', 'no captcha!'):
         return json.dumps({'status': 'warning', 'msg': '验证码错误'})
     if User.has(email=new_email) and User.find_one(email=new_email).uuid != u.uuid:
         return json.dumps({'status': 'warning', 'msg': '该邮箱已被占用'})

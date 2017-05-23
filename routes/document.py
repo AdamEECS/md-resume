@@ -39,7 +39,7 @@ def send_mail(doc_url):
     captcha = form.get('captcha', '').lower()
     email = form.get('email')
     token = form.get('token', '')
-    if captcha != session.get('captcha', 'no captcha!'):
+    if captcha != session.pop('captcha', 'no captcha!'):
         return json.dumps({'status': 'warning', 'msg': '验证码错误!'})
     d = Document.find_one(doc_url=doc_url)
     a = Auth.find_one(token=token, doc_uuid=d.uuid)
