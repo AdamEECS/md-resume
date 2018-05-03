@@ -1,60 +1,60 @@
 {% extends 'base.html' %} {% block body %}
-    <ol class="breadcrumb">
-        <li><a href="{{ url_for('user.auths') }}">My Auths</a></li>
-        <li class="active">Auth Token</li>
-    </ol>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <h3>授权码设置</h3>
-            <div class="panel-profile">
-                <form method=POST enctype=multipart/form-data action="{{ url_for('user.auth_update', token=a.token) }}">
-                    <label>URL</label>
-                    <div>
-                        {{ d.base_url + url_for('document.protected',doc_url=d.doc_url, token=a.token) }}
-                    </div>
-                    <label>授权码
+<ol class="breadcrumb">
+    <li><a href="{{ url_for('user.auths') }}">My Auths</a></li>
+    <li class="active">Auth Token</li>
+</ol>
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <h3>授权码设置</h3>
+        <div class="panel-profile">
+            <form method=POST enctype=multipart/form-data action="{{ url_for('user.auth_update', token=a.token) }}">
+                <label>URL</label>
+                <div>
+                    {{ d.base_url + url_for('document.protected',doc_url=d.doc_url, token=a.token) }}
+                </div>
+                <label>授权码
                         <input class="form-control" name="token" value="{{ a.token }}" readonly>
                     </label>
-                    <label>备注
+                <label>备注
                         <input class="form-control" name="comment" value="{{ a.comment }}">
                     </label>
-                    <label>剩余次数
+                <label>剩余次数
                         <input class="form-control" name="token_times" value="{{ a.token_times }}" type="number">
                     </label>
-                    <label>有效期
+                <label>有效期
                         <input class="form-control" name="token_exp" value="{{ a.token_exp|time_str_datetime }}"
                                type="datetime-local">
                     </label>
-                    <label>状态:
+                <label>状态:
                         {% if a.verified %}
                             <span class="text-success">生效中</span>
                         {% else %}
                             <span class="text-danger">已失效</span>
                         {% endif %}
                     </label>
-                    <br>
-                    <button class="btn btn-success btn-block">提交</button>
-                </form>
-            </div>
+                <br>
+                <button class="btn btn-success btn-block">提交</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+<h3>访问历史</h3>
+<div class="container-fluid">
+    {% for i in history %}
+    <div class="row panel {% if i.success %} panel-success {% else %} panel-danger {% endif %}">
+        <div class="panel-heading">访问时间：{{ i.ct|time_str }} 授权通过：{{ i.success }}</div>
+        <div class="panel-body ">
+            <div> 访问方式：{{ i.mode }} {{ i.email }}</div>
+            <div> 操作系统：{{ i.platform }} </div>
+            <div> 浏览器：{{ i.browser }} {{ i.version }} </div>
+            <div> 访问来源：{{ i.ip }} </div>
+            <div> User Agent：{{ i.user_agent }} </div>
         </div>
 
     </div>
-
-    <hr>
-    <h3>访问历史</h3>
-    <div class="container-fluid">
-        {% for i in history %}
-            <div class="row panel {% if i.success %} panel-success {% else %} panel-danger {% endif %}">
-                <div class="panel-heading">访问时间：{{ i.ct|time_str }} 授权通过：{{ i.success }}</div>
-                <div class="panel-body ">
-                    <div> 访问方式：{{ i.mode }} {{ i.email }}</div>
-                    <div> 操作系统：{{ i.platform }} </div>
-                    <div> 浏览器：{{ i.browser }} {{ i.version }} </div>
-                    <div> 访问来源：{{ i.ip }} </div>
-                    <div> User Agent：{{ i.user_agent }} </div>
-                </div>
-
-            </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
+</div>
 {% endblock %}
