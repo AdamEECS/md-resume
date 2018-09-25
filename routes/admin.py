@@ -122,10 +122,10 @@ def user_update(id):
 #     return redirect(url_for('admin.document_new'))
 
 
-@main.route('/root/reset')
-@login_required
-def root_reset():
-    root = User.find_one(username='root')
-    root.password = root.salted_password('123456')
-    root.save()
-    return redirect(url_for('admin.document_new'))
+# @main.route('/root/reset')
+# @login_required
+# def root_reset():
+#     root = User.find_one(username='root')
+#     root.password = root.salted_password('123456')
+#     root.save()
+#     return redirect(url_for('admin.document_new'))
