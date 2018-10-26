@@ -15,6 +15,7 @@ def register_routes(app):
     from routes.img import main as routes_img
     from routes.document import main as routes_document
     from routes.demo import main as routes_demo
+    from routes.ocr import main as routes_ocr
 
     app.register_blueprint(routes_user, url_prefix='/user')
     app.register_blueprint(routes_index, url_prefix='/')
@@ -22,6 +23,7 @@ def register_routes(app):
     app.register_blueprint(routes_img, url_prefix='/img')
     app.register_blueprint(routes_document, url_prefix='/doc')
     app.register_blueprint(routes_demo, url_prefix='/demo')
+    app.register_blueprint(routes_ocr, url_prefix='/ocr')
 
 
 def register_filters(app):

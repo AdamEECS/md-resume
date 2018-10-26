@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    图片文字识别
+{% endblock %}
+
+{% block head_login %}
+    <ul class="nav navbar-nav navbar-left">
+        <li>
+            <a class="navbar-brand" href="#">图片文字识别</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block body %}
+
+    <div>
+        <form class="form-inline" action="{{ url_for('ocr.parse') }}" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <span class="input-group-addon">选择图片</span>
+                <input type="file" class="form-control" name="image" id="image" required>
+            </div>
+            <button type="submit" class="btn btn-default">分析图片</button>
+        </form>
+    </div>
+    <br>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            图片大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式
+        </div>
+    </div>
+
+    <div class="jumbotron" style="min-height: 400px;">
+        <p>{{ p }}</p>
+    </div>
+{% endblock %}
