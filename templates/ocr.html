@@ -31,6 +31,8 @@
     </div>
 
     <div class="jumbotron" style="min-height: 400px;">
-        <p>{{ p }}</p>
+        {% for foo in ps %}
+            <p>{{ foo }}</p>
+        {% endfor %}
     </div>
 {% endblock %}

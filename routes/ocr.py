@@ -25,8 +25,10 @@ def parse():
         d = json.loads(r.content.decode())
         words_list = d.get('words_result')
         # pprint.pprint(d)
-        p = ''.join([i.get('words') for i in words_list])
+        ps = [i.get('words') for i in words_list]
+        p = ''.join(ps)
     except Exception as e:
         print(e)
         p = '解析失败，请重试。'
-    return render_template('ocr.html', p=p)
+        ps = [p]
+    return render_template('ocr.html', p=p, ps=ps)
